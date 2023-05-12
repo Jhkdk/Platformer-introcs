@@ -6,6 +6,7 @@ PImage red_brick, snow, crate, brown_brick, gold, spider, player;
 ArrayList<Sprite> platforms;
 ArrayList<Sprite> coins;
 Enemy enemy;
+boolean isGameOver;
 
 int numCoins;
 //variable that can't be modified
@@ -44,6 +45,8 @@ void setup() {
   //accessing the variables outside the object
   p.change_x = 0;
   p.change_y = 0;
+  numCoins = 0;
+  isGameOver = false;
   //initializing the arrayList
   platforms = new ArrayList<Sprite>();
   coins = new ArrayList<Sprite>();
@@ -61,11 +64,27 @@ void draw() {
   background(255);
   //needs to be first!!!! otherwise it will draw other stuff in wrong place
   scroll();
+  displayAll();
+  if(!isGameOver){
+    updateAll();
+    collectCoins();
+  }
+}
+void collectCoins(){
+  ArrayList<Sprite> coin = checkCollisionList(p,coins);
+  int num = coin.size();
+  numCoins += num;
+}
+void updateAll(){
   //calling the methods
-  p.display();
   p.updateAnimation();
   
   resolvePlatformCollisions(p, platforms);
+  enemy.update();
+  enemy.updateAnimation();
+}
+void displayAll(){
+  p.display();
   //drawing the csv file
   for (Sprite s : platforms) {
     s.display();
@@ -76,11 +95,18 @@ void draw() {
   }
   fill(255,0,0);
   textSize(32);
-  text("Coins:" + numCoins,50,50);
-  
+  text("Coins:" + numCoins,view_x+50,view_y+50);
+  text("Lives:" + p.lives, view_x+50,view_y+100);
+  if(isGameOver){
+    fill(0,0,255);
+    text("GAME OVER!", view_x + width/2 - 100, view_y + height/2);
+    if(p.lives == 0){
+      text("you lost!", view_x + width/2 - 100, view_y + height/2 + 100);
+    }else{
+      text("you won!", view_x + width/2 - 100, view_y + height/2 + 100);
+    }
+  }
   enemy.display();
-  enemy.update();
-  enemy.updateAnimation();
 }
 void scroll() {
   //too far to the right, adjusts camera

@@ -31,6 +31,7 @@ class Player extends AnimatedSprite {
 
   //Override
   void updateAnimation() {
+    index = 0;
     onPlatform = isOnPlatform(this, platforms);
     inPlace = change_x == 0 && change_y == 0;
     super.updateAnimation();
@@ -50,26 +51,20 @@ class Player extends AnimatedSprite {
   void selectCurrentImages() {
     if(direction == RIGHT_FACING){
       if(inPlace){
-        index = 0;
         currentImages = standRight;
       }else if(!onPlatform){
-        index = 0;
         currentImages = jumpRight;
       }else{
-        index = 0;
         currentImages = moveRight;
       }
     }
     //left logic
     if(direction == LEFT_FACING){
       if(inPlace){
-        index = 0;
         currentImages = standLeft;
       }else if(!onPlatform){
-        index = 0;
         currentImages = jumpLeft;
       }else{
-        index = 0;
         currentImages = moveLeft;
       }
     }
