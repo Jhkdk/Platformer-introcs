@@ -1,7 +1,7 @@
 //declaring the new obejct
-Sprite p;
+Player p;
 //images
-PImage red_brick, snow, crate, brown_brick, gold, spider;
+PImage red_brick, snow, crate, brown_brick, gold, spider, player;
 //arrayLists, a different more adjustable array
 ArrayList<Sprite> platforms;
 ArrayList<Sprite> coins;
@@ -37,7 +37,10 @@ void setup() {
   imageMode(CENTER);
   //initializing the new object
   //the player size can cause boundary issues
-  p = new Sprite("data/player.png", .9, 100, 300);
+  player = loadImage("player.png");
+  p = new Player(player, 0.8);
+  p.setBottom(GROUND_LEVEL);
+  p.center_x = 100;
   //accessing the variables outside the object
   p.change_x = 0;
   p.change_y = 0;
@@ -45,12 +48,12 @@ void setup() {
   platforms = new ArrayList<Sprite>();
   coins = new ArrayList<Sprite>();
   //initializing the images
-  spider = loadImage("data/Spider/Spider_walk_right/spider_walk_right1.png");
-  gold = loadImage("data/Coin/gold1.png");
-  red_brick = loadImage("data/red_brick.png");
-  snow = loadImage("data/snow.png");
-  crate = loadImage("data/crate.png");
-  brown_brick = loadImage("data/brown_brick.png");
+  spider = loadImage("spider_walk_right1.png");
+  gold = loadImage("gold1.png");
+  red_brick = loadImage("red_brick.png");
+  snow = loadImage("snow.png");
+  crate = loadImage("crate.png");
+  brown_brick = loadImage("brown_brick.png");
   //loading the csv file and using it
   createPlatforms("map.csv");
 }
@@ -59,8 +62,9 @@ void draw() {
   //needs to be first!!!! otherwise it will draw other stuff in wrong place
   scroll();
   //calling the methods
-  p.isDead();
   p.display();
+  p.updateAnimation();
+  
   resolvePlatformCollisions(p, platforms);
   //drawing the csv file
   for (Sprite s : platforms) {
@@ -211,7 +215,7 @@ void createPlatforms(String filename) {
       } else if (values[col].equals("6")) {
         float bLeft = col * SPRITE_SIZE;
         float bRight = bLeft + 4 * SPRITE_SIZE;
-        enemy = new Enemy(spider,50/72.0,bLeft,bRight);
+        enemy = new Enemy(spider,50/48.0,bLeft,bRight);
         enemy.center_x = SPRITE_SIZE/2 + col * SPRITE_SIZE;
         enemy.center_y = SPRITE_SIZE/2 + row * SPRITE_SIZE;
       }

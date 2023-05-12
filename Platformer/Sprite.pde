@@ -15,13 +15,6 @@ class Sprite {
     change_x = 0;
     change_y = 0;
   }
-  //this is my personal addition to add death to the game
-  void isDead() {
-    if (center_y > height+1000) {
-      exit();
-      println("you fell off!!!");
-    }
-  }
   //overloaded constructor
   Sprite(String filename, float scale) {
     //initializing variables
